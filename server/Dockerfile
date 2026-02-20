@@ -8,8 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install yt-dlp nightly (latest YouTube compat fixes)
-RUN pip3 install --break-system-packages yt-dlp[default] \
-    && yt-dlp --update-to nightly
+RUN pip3 install --break-system-packages -U "yt-dlp[default] @ https://github.com/yt-dlp/yt-dlp-nightly-builds/releases/download/2026.02.19.233638/yt-dlp.tar.gz"
 
 WORKDIR /app
 

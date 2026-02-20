@@ -47,10 +47,11 @@ function isValidYouTubeUrl(url) {
     return typeof url === "string" && YT_REGEX.test(url.trim());
 }
 
-/** Common yt-dlp args to avoid 403 errors */
+/** Common yt-dlp args to avoid errors on datacenter IPs */
 const YT_DLP_BASE_ARGS = [
     "--no-playlist",
     "--no-warnings",
+    "--no-check-formats",
 ];
 
 // --- Cookie authentication for YouTube ---
@@ -141,7 +142,7 @@ app.post("/api/convert", async (req, res) => {
 
         // Download & convert to MP3
         await runYtDlp([
-            "-f", "bestaudio",
+            "-f", "bestaudio/best",
             "-x",
             "--audio-format", "mp3",
             "--audio-quality", "0",

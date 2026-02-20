@@ -5,7 +5,7 @@
 // 🔧 Change this to your Render backend URL once deployed
 const API_BASE = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
     ? "http://localhost:3001"
-    : "https://YOUR-RENDER-SERVICE.onrender.com"; // <-- Replace with your Render URL
+    : "https://yt-to-mp3-api-ip0s.onrender.com"; // <-- Replace with your Render URL
 
 // --- DOM refs -------------------------------------------------------
 const urlInput = document.getElementById("url-input");

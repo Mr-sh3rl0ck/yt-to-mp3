@@ -47,6 +47,33 @@ function isValidYouTubeUrl(url) {
     return typeof url === "string" && YT_REGEX.test(url.trim());
 }
 
+/** Strip playlist/tracking params and normalize the URL to just the video */
+function cleanYouTubeUrl(rawUrl) {
+    const url = rawUrl.trim();
+
+    // Extract video ID from various formats
+    let videoId = null;
+
+    // youtu.be/VIDEO_ID
+    const shortMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+    if (shortMatch) videoId = shortMatch[1];
+
+    // youtube.com/watch?v=VIDEO_ID or music.youtube.com/watch?v=VIDEO_ID
+    const longMatch = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+    if (longMatch) videoId = longMatch[1];
+
+    // youtube.com/shorts/VIDEO_ID
+    const shortsMatch = url.match(/shorts\/([a-zA-Z0-9_-]{11})/);
+    if (shortsMatch) videoId = shortsMatch[1];
+
+    if (videoId) {
+        return `https://www.youtube.com/watch?v=${videoId}`;
+    }
+
+    // Fallback: return as-is
+    return url;
+}
+
 /** Common yt-dlp args to avoid errors on datacenter IPs */
 const YT_DLP_BASE_ARGS = [
     "--no-playlist",
@@ -103,10 +130,12 @@ app.post("/api/info", async (req, res) => {
         if (!isValidYouTubeUrl(url)) {
             return res.status(400).json({ error: "Invalid YouTube URL." });
         }
+        const cleanUrl = cleanYouTubeUrl(url);
+        console.log("Clean URL:", cleanUrl);
 
         const raw = await runYtDlp([
             "--dump-json",
-            url.trim(),
+            cleanUrl,
         ]);
 
         const data = JSON.parse(raw);
@@ -136,8 +165,10 @@ app.post("/api/convert", async (req, res) => {
     const expectedFile = path.join(tmpDir, `yt2mp3_${id}.mp3`);
 
     try {
+        const cleanUrl = cleanYouTubeUrl(url);
+
         // Get title first for the filename
-        const rawInfo = await runYtDlp(["--dump-json", url.trim()]);
+        const rawInfo = await runYtDlp(["--dump-json", cleanUrl]);
         const info = JSON.parse(rawInfo);
         const safeTitle = info.title.replace(/[^\w\s\-()[\]]/g, "").trim() || "audio";
 
@@ -148,7 +179,7 @@ app.post("/api/convert", async (req, res) => {
             "--audio-format", "mp3",
             "--audio-quality", "0",
             "-o", outTemplate,
-            url.trim(),
+            cleanUrl,
         ]);
 
         // Check file exists

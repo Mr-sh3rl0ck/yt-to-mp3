@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YT to MP3 — Descarga música de YouTube</title>
+  <meta name="description" content="Convierte videos de YouTube a MP3 y descárgalos gratis. Pega el link y obtén tu música." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Animated background blobs -->
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <main class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="48" height="48" rx="12" fill="url(#logo-grad)"/>
+          <path d="M18 14v20l16-10L18 14z" fill="#fff"/>
+          <defs>
+            <linearGradient id="logo-grad" x1="0" y1="0" x2="48" y2="48">
+              <stop stop-color="#7c3aed"/>
+              <stop offset="1" stop-color="#ec4899"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <h1>YT<span class="accent">2</span>MP3</h1>
+      </div>
+      <p class="tagline">Pega un link de YouTube y descarga el audio en MP3</p>
+    </header>
+
+    <!-- Input Section -->
+    <section class="input-section" id="input-section">
+      <div class="input-wrapper">
+        <div class="input-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+          </svg>
+        </div>
+        <input
+          type="url"
+          id="url-input"
+          placeholder="https://www.youtube.com/watch?v=..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button id="convert-btn" type="button">
+          <span class="btn-text">Convertir</span>
+          <span class="btn-loader" hidden>
+            <svg class="spinner" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="31.4 31.4" stroke-linecap="round"/></svg>
+          </span>
+        </button>
+      </div>
+      <p class="input-hint" id="input-error" hidden>⚠️ Introduce un link válido de YouTube</p>
+    </section>
+
+    <!-- Preview Card -->
+    <section class="preview-card" id="preview-card" hidden>
+      <div class="preview-thumb-wrap">
+        <img id="preview-thumb" src="" alt="Video thumbnail" />
+        <div class="preview-duration" id="preview-duration"></div>
+      </div>
+      <div class="preview-info">
+        <h2 id="preview-title" class="preview-title"></h2>
+        <p id="preview-channel" class="preview-channel"></p>
+      </div>
+    </section>
+
+    <!-- Progress Section -->
+    <section class="progress-section" id="progress-section" hidden>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+      <p class="progress-text" id="progress-text">Convirtiendo a MP3…</p>
+    </section>
+
+    <!-- Download Section -->
+    <section class="download-section" id="download-section" hidden>
+      <div class="success-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+      </div>
+      <p class="success-text">¡Listo! Tu MP3 está preparado</p>
+      <a id="download-link" class="download-btn" download>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Descargar MP3
+      </a>
+      <button id="new-convert-btn" class="new-btn" type="button">Convertir otro</button>
+    </section>
+
+    <!-- Error toast -->
+    <div class="toast" id="toast" hidden>
+      <span id="toast-msg"></span>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>Hecho solo para uso personal · No almacenamos archivos</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

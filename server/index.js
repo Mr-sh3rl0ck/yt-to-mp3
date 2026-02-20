@@ -174,7 +174,7 @@ app.post("/api/convert", async (req, res) => {
 
         // Download & convert to MP3
         await runYtDlp([
-            "-f", "bestaudio/best",
+            "-S", "vcodec:h264,res:720,acodec:aac",
             "-x",
             "--audio-format", "mp3",
             "--audio-quality", "0",

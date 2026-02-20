@@ -79,7 +79,7 @@ const YT_DLP_BASE_ARGS = [
     "--no-playlist",
     "--no-warnings",
     "--no-check-formats",
-    "--extractor-args", "youtube:player_client=ios,web",
+    "--extractor-args", "youtube:player_client=mweb",
 ];
 
 // --- Cookie authentication for YouTube ---

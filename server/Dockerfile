@@ -7,8 +7,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
-# Install yt-dlp via pip
-RUN pip3 install --break-system-packages yt-dlp
+# Install yt-dlp nightly (latest YouTube compat fixes)
+RUN pip3 install --break-system-packages yt-dlp[default] \
+    && yt-dlp --update-to nightly
 
 WORKDIR /app
 

@@ -53,10 +53,24 @@ const YT_DLP_BASE_ARGS = [
     "--no-warnings",
 ];
 
-// Use browser cookies locally (set USE_BROWSER_COOKIES=chrome to enable)
-// On Render/Docker there is no browser, so this stays off in production
+// --- Cookie authentication for YouTube ---
+// Option 1: Local dev — use browser cookies directly
 if (process.env.USE_BROWSER_COOKIES) {
     YT_DLP_BASE_ARGS.push("--cookies-from-browser", process.env.USE_BROWSER_COOKIES);
+}
+
+// Option 2: Production (Render) — use cookies from env var
+// Set YT_COOKIES env var with base64-encoded content of a cookies.txt file
+const COOKIES_PATH = path.join(os.tmpdir(), "yt_cookies.txt");
+if (process.env.YT_COOKIES) {
+    try {
+        const decoded = Buffer.from(process.env.YT_COOKIES, "base64").toString("utf-8");
+        fs.writeFileSync(COOKIES_PATH, decoded);
+        YT_DLP_BASE_ARGS.push("--cookies", COOKIES_PATH);
+        console.log("YouTube cookies loaded from YT_COOKIES env var");
+    } catch (e) {
+        console.error("Failed to load YT_COOKIES:", e.message);
+    }
 }
 
 /** Run yt-dlp with given args and return stdout */
@@ -102,7 +116,7 @@ app.post("/api/info", async (req, res) => {
         });
     } catch (err) {
         console.error("INFO ERROR:", err.message);
-        res.status(500).json({ error: "Could not fetch video info. Please check the URL." });
+        res.status(500).json({ error: err.message || "Could not fetch video info." });
     }
 });
 
